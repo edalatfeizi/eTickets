@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using eTickets.Data.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace eTickets.ViewModels
 {
-    public class ActorViewModel
+    public class ActorViewModel :IEntityBase
     {
         [Key]
         public int Id { get; set; }

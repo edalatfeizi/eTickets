@@ -17,7 +17,19 @@ namespace eTickets.Controllers
         public async Task<IActionResult> Index()
         {
             var actors = await _service.GetAllAsync();
-            return View(actors);
+            var _actors = new List<ActorViewModel>();
+            foreach (var actor in actors)
+            {
+                var actorViewModel = new ActorViewModel()
+                {
+                    Id = actor.Id,
+                    FullName = actor.FullName,
+                    ProfilePictureURL = actor.ProfilePictureURL,
+                    Bio = actor.Bio
+                };
+                _actors.Add(actorViewModel);
+            }
+            return View(_actors);
         }  
         //Get: Actors/Create
         public IActionResult Create()
@@ -26,12 +38,19 @@ namespace eTickets.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("FullName,ProfilePictureURL,Bio")][FromForm] ActorViewModel actor)
+        public async Task<IActionResult> Create([Bind("FullName,ProfilePictureURL,Bio")][FromForm] ActorViewModel _actor)
         {
             if (!ModelState.IsValid)
             {
-                return View(actor);
+                return View(_actor);
             }
+            var actor = new Actor
+            {
+                Id = _actor.Id,
+                FullName = _actor.FullName,
+                ProfilePictureURL = _actor.ProfilePictureURL,
+                Bio = _actor.Bio
+            };
             await _service.AddAsync(actor);
             return RedirectToAction(nameof(Index));
         }
@@ -41,7 +60,15 @@ namespace eTickets.Controllers
             var actorDetails = await _service.GetByIdAsync(id);
 
             if (actorDetails == null) return View("NotFound");
-            return View(actorDetails);
+            var _actor = new ActorViewModel()
+            {
+                Id = actorDetails.Id,
+                FullName = actorDetails.FullName,
+                ProfilePictureURL = actorDetails.ProfilePictureURL,
+                Bio = actorDetails.Bio
+            };
+
+            return View(_actor);
         }
 
         //Get: Actors/Edit/1
@@ -50,16 +77,30 @@ namespace eTickets.Controllers
             var actorDetails = await _service.GetByIdAsync(id);
 
             if (actorDetails == null) return View("NotFound");
-            return View(actorDetails);
+            var _actor = new ActorViewModel()
+            {
+                Id = actorDetails.Id,
+                FullName = actorDetails.FullName,
+                ProfilePictureURL = actorDetails.ProfilePictureURL,
+                Bio = actorDetails.Bio
+            };
+            return View(_actor);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,ProfilePictureURL,Bio")] ActorViewModel actor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,ProfilePictureURL,Bio")] ActorViewModel _actor)
         {
             if (!ModelState.IsValid)
             {
-                return View(actor);
+                return View(_actor);
             }
+            var actor = new Actor
+            {
+                Id = _actor.Id,
+                FullName = _actor.FullName,
+                ProfilePictureURL = _actor.ProfilePictureURL,
+                Bio = _actor.Bio
+            };
             await _service.UpdateAsync(id,actor);
             return RedirectToAction(nameof(Index));
         }
@@ -69,7 +110,14 @@ namespace eTickets.Controllers
             var actorDetails = await _service.GetByIdAsync(id);
 
             if (actorDetails == null) return View("NotFound");
-            return View(actorDetails);
+            var _actor = new ActorViewModel()
+            {
+                Id = actorDetails.Id,
+                FullName = actorDetails.FullName,
+                ProfilePictureURL = actorDetails.ProfilePictureURL,
+                Bio = actorDetails.Bio
+            };
+            return View(_actor);
         }
 
         [HttpPost, ActionName("Delete")]
