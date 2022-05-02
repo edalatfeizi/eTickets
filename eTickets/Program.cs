@@ -13,7 +13,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 });
+
+//injecting dependencies
 builder.Services.AddScoped<IActorsService,ActorsService>();
+builder.Services.AddScoped<IProducersService,ProducersService>();
+
 //builder.Services.AddScoped<IEntityBaseRepository,EntityBaseRepository<T>();
 
 var app = builder.Build();
